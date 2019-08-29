@@ -1,0 +1,384 @@
+package utility;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public class Supportprice {
+	
+		public static HashMap<Integer,Double> getSupportprice(double arr[])
+		{
+		
+		//System.out.println(arr.length);
+		
+		HashMap<Integer,Boolean> hmuppertrends= new HashMap<Integer,Boolean>();
+		ArrayList<HashSet> listofhighertrends=new ArrayList<HashSet>();
+		ArrayList<Integer> Resistanceindexes= new ArrayList<Integer>();
+		ArrayList<Double> Resistanceprices= new ArrayList<Double>();
+		
+		HashMap<Integer,Double>highmapping=new HashMap<Integer,Double>();
+		ArrayList<Double> movingavg=new ArrayList<Double>();
+		ArrayList<HashSet> allincrsets= new ArrayList<HashSet>();
+		int checker = 0;
+		for (int i=0; i < arr.length - 1; i++)
+		{
+			
+			if (arr[i+1]<=arr[i]) {
+				
+				
+				HashSet<Integer> leftpair=new HashSet<Integer>();
+				leftpair.add(i+1);
+				leftpair.add(i+2);
+				allincrsets.add(leftpair);
+				//System.out.println(allincrsets);
+				
+			}
+			
+		}
+		
+		
+		//System.out.println("allincrsets"+allincrsets);
+		allincrsets=combiningsets(allincrsets);
+
+	
+	
+	HashMap<HashSet,Integer> highhashsettosize= new HashMap<HashSet,Integer>();
+	for (int i=0;i<allincrsets.size();i++)
+	{
+		
+		//System.out.println(allincrsets.get(i));
+		highhashsettosize.put(allincrsets.get(i),allincrsets.get(i).size());
+	
+	}
+	
+	//System.out.println("highhashsettosize "+highhashsettosize);
+	
+	
+	
+	
+	Map<HashSet,Integer> highhashsettosizesorted= new HashMap<HashSet,Integer>();
+	highhashsettosizesorted=sortByValue(highhashsettosize);
+	
+	//System.out.println("highhashsettosizesorted "+highhashsettosizesorted);
+	
+	
+	
+	
+	
+	Map<Integer,List<HashSet>> highmap = new HashMap<Integer,List<HashSet>>();
+	Collection<Integer> highsortednumbers= highhashsettosizesorted.values();
+	Object[] ahigh=highsortednumbers.toArray();
+	//System.out.println("The size of array high "+ahigh.length);
+	Set<HashSet> hshigh= highhashsettosizesorted.keySet();
+	
+	//System.out.println("hshigh "+hshigh);
+	Iterator itrhigh = hshigh.iterator();
+	int size_high=2;
+	int counter_high=0;
+	int currentsize_high = 2;
+	int currentsize2_high = 2;
+	int previoussize_high = 2;
+	boolean greaterthanprevious_high=false;
+	List<HashSet> ltrhigh=ReturnObject();
+	List<Integer> intltrhigh= new ArrayList<Integer>();
+	intltrhigh.add(2);
+   // System.out.println("Hash set of key "+ ltrhigh);
+    boolean odd=true;
+	while (itrhigh.hasNext())
+	{   
+	     int oddoreven=hshigh.size()%2;
+	 	 if(oddoreven==0)
+	     {
+	    	 odd=false;
+	     }
+		HashSet hs1_high=(HashSet) itrhigh.next();
+		//System.out.println("hs1_high "+hs1_high);
+		//System.out.println("Counter_high"+counter_high);
+		int sizeofnexthashset = 0;
+		if(odd && (hshigh.size()-counter_high)==3)
+		{
+			
+			if(hs1_high.size()==sizeofnexthashset)
+			{
+				ltrhigh.add(hs1_high);
+				highmap.put(hs1_high.size(), ltrhigh);
+			}
+			else
+			{
+				ltrhigh=ReturnObject();
+				ltrhigh.add(hs1_high);
+				highmap.put(hs1_high.size(), ltrhigh);
+			}
+		}
+		
+		if(itrhigh.hasNext())
+		if(odd && (hshigh.size()-counter_high)!=3 || !odd)
+		{
+		
+		HashSet hs2_high=(HashSet) itrhigh.next();
+		sizeofnexthashset=hs2_high.size();
+		//System.out.println("hs2_high "+hs2_high);
+		//System.out.println("Counter_high"+counter_high);
+		currentsize_high=hs1_high.size();
+		//previoussize=hs2.size();
+		counter_high=counter_high+1;
+		intltrhigh.add(currentsize_high);
+		previoussize_high=intltrhigh.get(intltrhigh.size()-2);
+		//System.out.println("previous size" +previoussize);
+		if(currentsize_high>previoussize_high)
+			greaterthanprevious_high=true;
+		
+	//	System.out.println("hs "+hs1 +"hs2 " +hs2);
+	//	System.out.println("greaterthanprevious"+greaterthanprevious);
+		if(hs1_high.size()==hs2_high.size() && !greaterthanprevious_high)
+		{
+			//System.out.println("else if(hs1_high.size()==hs2_high.size() && !greaterthanprevious_high )");
+			ltrhigh.add(hs1_high);
+			ltrhigh.add(hs2_high);
+		//	System.out.println("Current size" +currentsize);
+		//	System.out.println("Current size" +map);
+		}
+		else if(hs1_high.size()!=hs2_high.size() && ltrhigh!=null)
+		{   
+			
+			//System.out.println("else if(hs1_high.size()!=hs2_high.size() && ltrhigh!=null)");
+//			System.out.println("Current size in 1 high" +currentsize_high);
+			if(hs1_high.size()==currentsize_high)
+			{
+				ltrhigh.add(hs1_high);
+			}
+			highmap.put(currentsize_high, ltrhigh);
+			
+			ltrhigh=ReturnObject();
+			ltrhigh.add(hs2_high);
+			highmap.put(hs2_high.size(), ltrhigh);
+//			System.out.println("highmap "+highmap );
+			greaterthanprevious_high=false;
+			//System.out.println("Current size" +map);
+		}
+		else if(hs1_high.size()==hs2_high.size() && greaterthanprevious_high )
+		{  
+			//System.out.println("else if(hs1_high.size()==hs2_high.size() && greaterthanprevious_high )");	
+			//System.out.println("Current size in X " +currentsize);
+			//System.out.println("Current size in X hashmap " +hs1.size()+" "+hs2.size());
+			ltrhigh=ReturnObject();
+			highmap.put(currentsize_high, ltrhigh);
+			//ltr=ReturnObject();
+			ltrhigh.add(hs1_high);
+			ltrhigh.add(hs2_high);
+			greaterthanprevious_high=false;
+		//	System.out.println("Current size" +map);
+		}
+
+	//	System.out.println(hs1+""+hs2);
+		counter_high++;
+		}	
+	}
+//	System.out.println(currentsize_high);
+//	System.out.println(highmap);
+	Set <Integer> highmapkeyset= highmap.keySet();
+
+	
+	
+	for (Integer indexes : highmapkeyset)
+	{
+//		System.out.println(highmap.get(indexes).size());
+		//System.out.println(map.get(indexes).get(0));
+		
+		int highlooper=highmap.get(indexes).size();
+		for (int j=0;j<highlooper;j++)
+		{
+			
+		//	System.out.println(highmap.get(indexes).get(j));
+			int highhashsetsize=highmap.get(indexes).get(j).size();
+			HashSet<Integer> hightemp=highmap.get(indexes).get(j);
+			List<Integer> highlistofindexes = new ArrayList<Integer>(hightemp); 
+	        Collections.sort(highlistofindexes); 
+	        int siz=highlistofindexes.size();
+	     //   System.out.println("List of index "+highlistofindexes.get(siz-1));
+	        Resistanceprices.add(arr[highlistofindexes.get(siz-1)-1]);
+	     //   System.out.println("arr[highlistofindexes.get(siz-1)-1]"+arr[highlistofindexes.get(siz-1)-1]);
+	      //System.out.println("arr[highlistofindexes.get(siz-1)]"+arr[highlistofindexes.get(siz-1)-2]);
+	        Resistanceindexes.add(highlistofindexes.get(siz-1)-1);
+	      //  System.out.println("highlistofindexes.get(siz-1)"+highlistofindexes.get(siz-1));
+	        highmapping.put(highlistofindexes.get(siz-1),arr[highlistofindexes.get(siz-1)-1]);
+	        
+	        
+	/*		int count=0;
+			for(Integer index:hightemp)
+			{
+				count++;
+				System.out.println(index);
+				if(count==1)
+				{
+				System.out.println("Array"+arr[index-2]);
+				System.out.println("Array"+arr[index-1]);
+				}
+				else
+				{
+					System.out.println("Array"+arr[index-1]);
+				}
+			}
+		
+		*/
+		}
+		
+		
+		
+		
+	}
+
+//	System.out.println("Resistanceprices"+Resistanceprices);
+//	System.out.println("Resistanceindexes"+Resistanceindexes);
+//	System.out.println("highmapping"+highmapping);
+	Map<Integer,Double> high= new HashMap<Integer,Double>();
+	high=sortByKey(highmapping);
+//	System.out.println("high"+high);
+	
+	
+	
+//	movingavg=movavg(arr,20);
+//	System.out.println(movingavg.size());
+//	for (double d: movingavg)
+//	{
+//		//System.out.println(d);
+//		
+//	}
+	return (HashMap<Integer, Double>) high;
+	
+}// end of main
+	
+
+	
+	public static HashMap<HashSet, Integer> sortByValue(HashMap<HashSet, Integer> hm) 
+    { 
+        // Create a list from elements of HashMap 
+        List<Map.Entry<HashSet, Integer> > list = 
+               new LinkedList<Map.Entry<HashSet, Integer> >(hm.entrySet()); 
+  
+        // Sort the list 
+        Collections.sort(list, new Comparator<Map.Entry<HashSet, Integer> >() { 
+            public int compare(Map.Entry<HashSet, Integer> o1,  
+                               Map.Entry<HashSet, Integer> o2) 
+            { 
+                return (o1.getValue()).compareTo(o2.getValue()); 
+            } 
+        }); 
+          
+        // put data from sorted list to hashmap  
+        HashMap<HashSet, Integer> temp = new LinkedHashMap<HashSet, Integer>(); 
+        for (Map.Entry<HashSet, Integer> aa : list) { 
+            temp.put(aa.getKey(), aa.getValue()); 
+        } 
+        return temp; 
+    } 
+	
+	public static HashMap<Integer, Double> sortByKey(HashMap<Integer, Double> hm) 
+    { 
+        // Create a list from elements of HashMap 
+        List<Map.Entry<Integer, Double>> list = 
+               new LinkedList<Map.Entry<Integer, Double> >(hm.entrySet()); 
+  
+        // Sort the list 
+        Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() { 
+            public int compare(Map.Entry<Integer, Double> o1,  
+                               Map.Entry<Integer, Double> o2) 
+            { 
+                return (o1.getKey()).compareTo(o2.getKey()); 
+            } 
+        }); 
+          
+        // put data from sorted list to hashmap  
+        HashMap<Integer, Double> temp = new LinkedHashMap<Integer, Double>(); 
+        for (Map.Entry<Integer, Double> aa : list) { 
+            temp.put(aa.getKey(), aa.getValue()); 
+        } 
+        return temp; 
+    } 
+	
+	public static List<HashSet> ReturnObject()
+	{
+		return new ArrayList<HashSet>();
+		
+	}
+	
+	public static ArrayList<Double> movavg(double arr[],int period)
+	{
+		Double firstavg=(double) 0;
+		ArrayList<Double> temp= new ArrayList<Double>();
+		for(int i=0;i<period;i++)
+		{
+			firstavg=firstavg+arr[i];
+			
+		}
+		firstavg=firstavg/period;
+		//System.out.println("firstavg"+firstavg);
+		for(int i=period;i<arr.length-1;i++)
+		{
+			 firstavg=firstavg+(arr[i]-arr[i-period])/20;
+		//	System.out.println(adding );
+		//	System.out.println("Tempvar" +i+"   " +tempvar);
+			temp.add(firstavg);
+		}
+		
+		return temp;
+	}
+	
+	public static HashSet<Integer> union(HashSet<Integer> S1,HashSet<Integer> S2)
+	{
+	
+		HashSet<Integer> determine= new HashSet<Integer>();
+		determine.addAll(S1);
+		determine.addAll(S2);
+		
+		return determine;
+		
+		
+	}
+	public static boolean samesize(HashSet<Integer> S1,HashSet<Integer> S2,HashSet<Integer> union)
+	{
+	
+		
+        if (union.size()==S1.size()+S2.size())
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
+		
+		
+	}
+	public static ArrayList<HashSet> combiningsets (ArrayList<HashSet> arraylistofsets)
+	{
+		for (int i=1;i<arraylistofsets.size();i++)
+		{
+			boolean same=samesize(arraylistofsets.get(i-1),arraylistofsets.get(i),union(arraylistofsets.get(i-1),arraylistofsets.get(i)));
+			if(same) 
+			{
+				
+			}
+			else
+			{
+				HashSet<Integer>temp=(union(arraylistofsets.get(i-1),arraylistofsets.get(i)));
+				arraylistofsets.remove(arraylistofsets.get(i));
+				arraylistofsets.remove(arraylistofsets.get(i-1));
+				arraylistofsets.add(i-1, temp);
+				i--;
+			}
+			
+		}
+		return arraylistofsets;
+	}
+
+}
