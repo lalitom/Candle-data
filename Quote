@@ -1,0 +1,366 @@
+package httpclientdemo;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+
+import com.google.gson.Gson;
+
+import utility.Candledata;
+import utility.Checksum;
+import utility.Resistanceprice;
+import utility.Supportprice;
+import utility.TrendWithRes3;
+
+public class Quote22_Aug_2019 {
+	
+	public static void main(String[] args) {
+		
+		  try {
+			
+			  int itr=500;
+			  HashMap<String,HashMap<String,Double>> sbihash=new HashMap<String,HashMap<String,Double>>();
+			  HashMap<String,HashMap<String,Double>> sbihash1min=new HashMap<String,HashMap<String,Double>>();
+			  HashMap<String,HashMap<String,Double>> sbihash5min=new HashMap<String,HashMap<String,Double>>();
+			  HashMap<String,HashMap<String,Double>> sbihash15min=new HashMap<String,HashMap<String,Double>>();
+			  HashMap<String,HashMap<String,Double>> sbihash30min=new HashMap<String,HashMap<String,Double>>();
+			  HashMap<String,HashMap<String,Double>> sbihash1hr=new HashMap<String,HashMap<String,Double>>();
+			  List<HashMap<String,HashMap<String,Double>>> listof5min=new ArrayList<HashMap<String,HashMap<String,Double>>>();
+			  HashMap<String,Double> ohlcv = null;
+			  
+			  
+			  List<Double> nseidealist= new ArrayList<Double>();
+			  List<Double> nsejindalstellist= new ArrayList<Double>();
+			  List<Double> nserelinfralist= new ArrayList<Double>();
+			  List<Double> nsedishtvlist= new ArrayList<Double>();
+			  List<Double> nseindigolist= new ArrayList<Double>();
+			  List<Double> nsemmfinlist= new ArrayList<Double>();
+			  List<Double> nsesrtransfinlist= new ArrayList<Double>();
+			  List<Double> nsemanappuramlist= new ArrayList<Double>();
+			  List<Double> nserblbanklist= new ArrayList<Double>();
+			  List<Double> nseupllist= new ArrayList<Double>();
+			  List<Double> nsebajajfinsvlist= new ArrayList<Double>();
+			  List<Double> nsezeellist= new ArrayList<Double>();
+			  List<Double> nsetatasteellist= new ArrayList<Double>();
+			  List<Double> nsevedllist= new ArrayList<Double>();
+			  List<Double> nseyesbanklist= new ArrayList<Double>();
+			  List<Double> nsebioconlist= new ArrayList<Double>();
+			  List<Double> nsemcxlist= new ArrayList<Double>();
+			  List<Double> nsegrasimlist= new ArrayList<Double>();
+			  List<Double> nsesuntvlist= new ArrayList<Double>();
+			  List<Double> nsejswsteellist= new ArrayList<Double>();
+			  List<Double> nseapollohosplist= new ArrayList<Double>();
+			  List<Double> nseacclist= new ArrayList<Double>();
+			  List<Double> nsetechmlist= new ArrayList<Double>();
+			  List<Double> nsenmdclist= new ArrayList<Double>();
+			  List<Double> nsebpcllist= new ArrayList<Double>();
+			  List<Double> nseltfhlist= new ArrayList<Double>();
+			  List<Double> nsebankbarodalist= new ArrayList<Double>();
+			  List<Double> nsemuthootfinlist= new ArrayList<Double>();
+			  List<Double> nsekajariacerlist= new ArrayList<Double>();
+			  List<Double> nseapollotyrelist= new ArrayList<Double>();
+			  List<Double> nseambujacemlist= new ArrayList<Double>();
+			  List<Double> nsebhartiartllist= new ArrayList<Double>();
+			  List<Double> nseidbilist= new ArrayList<Double>();
+			  List<Double> nseheromotocolist= new ArrayList<Double>();
+			  List<Double> nsecesclist= new ArrayList<Double>();
+			  List<Double> nseiciciprulilist= new ArrayList<Double>();
+			  List<Double> nsehindalcolist= new ArrayList<Double>();
+			  List<Double> nsemgllist= new ArrayList<Double>();
+			  List<Double> nsepellist= new ArrayList<Double>();
+			  List<Double> nsemfsllist= new ArrayList<Double>();
+			  List<Double> nsetorntpharmlist= new ArrayList<Double>();
+			  List<Double> nseidfcfirstblist= new ArrayList<Double>();
+			  List<Double> nsebajfinancelist= new ArrayList<Double>();
+			  List<Double> nsecenturytexlist= new ArrayList<Double>();
+			  List<Double> nsenbcclist= new ArrayList<Double>();
+			  List<Double> nsesbinlist= new ArrayList<Double>();
+			  List<Double> nseindusindbklist= new ArrayList<Double>();
+			  List<Double> nseexideindlist= new ArrayList<Double>();
+			  List<Double> nsemmlist= new ArrayList<Double>();
+			  List<Double> nserelcapitallist= new ArrayList<Double>();
+			  List<Double> nsepvrlist= new ArrayList<Double>();
+			  List<Double> nseoillist= new ArrayList<Double>();
+			  List<Double> nsehindpetrolist= new ArrayList<Double>();
+			  List<Double> nseaxisbanklist= new ArrayList<Double>();
+			  List<Double> nsemothersumilist= new ArrayList<Double>();
+			  List<Double> nserecltdlist= new ArrayList<Double>();
+			  List<Double> nseraymondlist= new ArrayList<Double>();
+			  List<Double> nsecastrolindlist= new ArrayList<Double>();
+			  List<Double> nsebajajautolist= new ArrayList<Double>();
+			  List<Double> nseicicibanklist= new ArrayList<Double>();
+			  List<Double> nsetitanlist= new ArrayList<Double>();
+			  List<Double> nsetatachemlist= new ArrayList<Double>();
+			  List<Double> nsesiemenslist= new ArrayList<Double>();
+			  List<Double> nseltlist= new ArrayList<Double>();
+			  List<Double> nsebankindialist= new ArrayList<Double>();
+			  List<Double> nsearvindlist= new ArrayList<Double>();
+			  List<Double> nsesrflist= new ArrayList<Double>();
+			  List<Double> nsepfclist= new ArrayList<Double>();
+			  List<Double> nseashokleylist= new ArrayList<Double>();
+			  List<Double> nsefederalbnklist= new ArrayList<Double>();
+			  List<Double> nsepetronetlist= new ArrayList<Double>();
+			  List<Double> nsecanbklist= new ArrayList<Double>();
+			  List<Double> nsebataindialist= new ArrayList<Double>();
+			  List<Double> nsesaillist= new ArrayList<Double>();
+			  List<Double> nsehexawarelist= new ArrayList<Double>();
+			  List<Double> nsecholafinlist= new ArrayList<Double>();
+			  List<Double> nsetvsmotorlist= new ArrayList<Double>();
+			  List<Double> nsemrflist= new ArrayList<Double>();
+			  List<Double> nsejustdiallist= new ArrayList<Double>();
+			  List<Double> nsevoltaslist= new ArrayList<Double>();
+			  List<Double> nseinfylist= new ArrayList<Double>();
+			  List<Double> nsereliancelist= new ArrayList<Double>();
+			  List<Double> nsehavellslist= new ArrayList<Double>();
+			  List<Double> nsetatagloballist= new ArrayList<Double>();
+			  List<Double> nsebhellist= new ArrayList<Double>();
+			  List<Double> nseramcocemlist= new ArrayList<Double>();
+			  List<Double> nsebellist= new ArrayList<Double>();
+			  List<Double> nseitclist= new ArrayList<Double>();
+			  List<Double> nsenestleindlist= new ArrayList<Double>();
+			  List<Double> nseigllist= new ArrayList<Double>();
+			  List<Double> nsebharatforglist= new ArrayList<Double>();
+			  List<Double> nseciplalist= new ArrayList<Double>();
+			  List<Double> nseultracemcolist= new ArrayList<Double>();
+			  List<Double> nseequitaslist= new ArrayList<Double>();
+			  List<Double> nsepowergridlist= new ArrayList<Double>();
+			  List<Double> nselichsgfinlist= new ArrayList<Double>();
+			  List<Double> nsedaburlist= new ArrayList<Double>();
+			  List<Double> nsehdfclist= new ArrayList<Double>();
+			  List<Double> nsepidilitindlist= new ArrayList<Double>();
+			  List<Double> nsetataelxsilist= new ArrayList<Double>();
+			  List<Double> nseinfratellist= new ArrayList<Double>();
+			  List<Double> nsemcdowellnlist= new ArrayList<Double>();
+			  List<Double> nseescortslist= new ArrayList<Double>();
+			  List<Double> nsegaillist= new ArrayList<Double>();
+			  List<Double> nseubllist= new ArrayList<Double>();
+			  List<Double> nseadanipowerlist= new ArrayList<Double>();
+			  List<Double> nsedlflist= new ArrayList<Double>();
+			  List<Double> nsencclist= new ArrayList<Double>();
+			  List<Double> nseamarajabatlist= new ArrayList<Double>();
+			  List<Double> nseauropharmalist= new ArrayList<Double>();
+			  List<Double> nseadanientlist= new ArrayList<Double>();
+			  List<Double> nsehdfcbanklist= new ArrayList<Double>();
+			  List<Double> nseenginersinlist= new ArrayList<Double>();
+			  List<Double> nsegmrinfralist= new ArrayList<Double>();
+			  List<Double> nsedhfllist= new ArrayList<Double>();
+			  List<Double> nsetcslist= new ArrayList<Double>();
+			  List<Double> nsebergepaintlist= new ArrayList<Double>();
+			  List<Double> nsehindunilvrlist= new ArrayList<Double>();
+			  List<Double> nsepnblist= new ArrayList<Double>();
+			  List<Double> nsemarutilist= new ArrayList<Double>();
+			  List<Double> nsehindzinclist= new ArrayList<Double>();
+			  List<Double> nseioclist= new ArrayList<Double>();
+			  List<Double> nseconcorlist= new ArrayList<Double>();
+			  List<Double> nsepageindlist= new ArrayList<Double>();
+			  List<Double> nsentpclist= new ArrayList<Double>();
+			  List<Double> nseunionbanklist= new ArrayList<Double>();
+			  List<Double> nsebsoftlist= new ArrayList<Double>();
+			  List<Double> nseshreecemlist= new ArrayList<Double>();
+			  List<Double> nsemaricolist= new ArrayList<Double>();
+			  List<Double> nseasianpaintlist= new ArrayList<Double>();
+			  List<Double> nseniittechlist= new ArrayList<Double>();
+			  List<Double> nsehcltechlist= new ArrayList<Double>();
+			  List<Double> nsetorntpowerlist= new ArrayList<Double>();
+			  List<Double> nsedivislablist= new ArrayList<Double>();
+			  List<Double> nsetatapowerlist= new ArrayList<Double>();
+			  List<Double> nseeichermotlist= new ArrayList<Double>();
+			  List<Double> nsetatamtrdvrlist= new ArrayList<Double>();
+			  List<Double> nseadaniportslist= new ArrayList<Double>();
+			  List<Double> nsecumminsindlist= new ArrayList<Double>();
+			  List<Double> nsecadilahclist= new ArrayList<Double>();
+			  List<Double> nsetatamotorslist= new ArrayList<Double>();
+			  List<Double> nsejublfoodlist= new ArrayList<Double>();
+			  List<Double> nseongclist= new ArrayList<Double>();
+			  List<Double> nsecolpallist= new ArrayList<Double>();
+			  List<Double> nsestarlist= new ArrayList<Double>();
+			  List<Double> nsekotakbanklist= new ArrayList<Double>();
+			  List<Double> nsebritannialist= new ArrayList<Double>();
+			  List<Double> nsedrreddylist= new ArrayList<Double>();
+			  List<Double> nsecoalindialist= new ArrayList<Double>();
+			  List<Double> nselupinlist= new ArrayList<Double>();
+			  List<Double> nsemindtreelist= new ArrayList<Double>();
+			  List<Double> nseboschltdlist= new ArrayList<Double>();
+			  List<Double> nsebalkrisindlist= new ArrayList<Double>();
+			  List<Double> nseofsslist= new ArrayList<Double>();
+			  List<Double> nsegodrejcplist= new ArrayList<Double>();
+			  List<Double> nsenationalumlist= new ArrayList<Double>();
+			  List<Double> nsewiprolist= new ArrayList<Double>();
+			  List<Double> nseujjivanlist= new ArrayList<Double>();
+			  List<Double> nseibulhsgfinlist= new ArrayList<Double>();
+			  List<Double> nsesunpharmalist= new ArrayList<Double>();
+			  List<Double> nseglenmarklist= new ArrayList<Double>();
+			  int volume1 = 0;
+			  FileReader reader=new FileReader("./config/Config.properties");
+			  Properties prop= new Properties();
+			  prop.load(reader);
+			  String url="&i=NSE:IDEA&i=NSE:JINDALSTEL&i=NSE:RELINFRA&i=NSE:DISHTV&i=NSE:INDIGO&i=NSE:M&MFIN&i=NSE:SRTRANSFIN&i=NSE:MANAPPURAM&i=NSE:RBLBANK&i=NSE:UPL&i=NSE:BAJAJFINSV&i=NSE:ZEEL&i=NSE:TATASTEEL&i=NSE:VEDL&i=NSE:YESBANK&i=NSE:BIOCON&i=NSE:MCX&i=NSE:GRASIM&i=NSE:SUNTV&i=NSE:JSWSTEEL&i=NSE:APOLLOHOSP&i=NSE:ACC&i=NSE:TECHM&i=NSE:NMDC&i=NSE:BPCL&i=NSE:L&TFH&i=NSE:BANKBARODA&i=NSE:MUTHOOTFIN&i=NSE:KAJARIACER&i=NSE:APOLLOTYRE&i=NSE:AMBUJACEM&i=NSE:BHARTIARTL&i=NSE:IDBI&i=NSE:HEROMOTOCO&i=NSE:CESC&i=NSE:ICICIPRULI&i=NSE:HINDALCO&i=NSE:MGL&i=NSE:PEL&i=NSE:MFSL&i=NSE:TORNTPHARM&i=NSE:IDFCFIRSTB&i=NSE:BAJFINANCE&i=NSE:CENTURYTEX&i=NSE:NBCC&i=NSE:SBIN&i=NSE:INDUSINDBK&i=NSE:EXIDEIND&i=NSE:M&M&i=NSE:RELCAPITAL&i=NSE:PVR&i=NSE:OIL&i=NSE:HINDPETRO&i=NSE:AXISBANK&i=NSE:MOTHERSUMI&i=NSE:RECLTD&i=NSE:RAYMOND&i=NSE:CASTROLIND&i=NSE:BAJAJ-AUTO&i=NSE:ICICIBANK&i=NSE:TITAN&i=NSE:TATACHEM&i=NSE:SIEMENS&i=NSE:LT&i=NSE:BANKINDIA&i=NSE:ARVIND&i=NSE:SRF&i=NSE:PFC&i=NSE:ASHOKLEY&i=NSE:FEDERALBNK&i=NSE:PETRONET&i=NSE:CANBK&i=NSE:BATAINDIA&i=NSE:SAIL&i=NSE:HEXAWARE&i=NSE:CHOLAFIN&i=NSE:TVSMOTOR&i=NSE:MRF&i=NSE:JUSTDIAL&i=NSE:VOLTAS&i=NSE:INFY&i=NSE:RELIANCE&i=NSE:HAVELLS&i=NSE:TATAGLOBAL&i=NSE:BHEL&i=NSE:RAMCOCEM&i=NSE:BEL&i=NSE:ITC&i=NSE:NESTLEIND&i=NSE:IGL&i=NSE:BHARATFORG&i=NSE:CIPLA&i=NSE:ULTRACEMCO&i=NSE:EQUITAS&i=NSE:POWERGRID&i=NSE:LICHSGFIN&i=NSE:DABUR&i=NSE:HDFC&i=NSE:PIDILITIND&i=NSE:TATAELXSI&i=NSE:INFRATEL&i=NSE:MCDOWELL-N&i=NSE:ESCORTS&i=NSE:GAIL&i=NSE:UBL&i=NSE:ADANIPOWER&i=NSE:DLF&i=NSE:NCC&i=NSE:AMARAJABAT&i=NSE:AUROPHARMA&i=NSE:ADANIENT&i=NSE:HDFCBANK&i=NSE:ENGINERSIN&i=NSE:GMRINFRA&i=NSE:DHFL&i=NSE:TCS&i=NSE:BERGEPAINT&i=NSE:HINDUNILVR&i=NSE:PNB&i=NSE:MARUTI&i=NSE:HINDZINC&i=NSE:IOC&i=NSE:CONCOR&i=NSE:PAGEIND&i=NSE:NTPC&i=NSE:UNIONBANK&i=NSE:BSOFT&i=NSE:SHREECEM&i=NSE:MARICO&i=NSE:ASIANPAINT&i=NSE:NIITTECH&i=NSE:HCLTECH&i=NSE:TORNTPOWER&i=NSE:DIVISLAB&i=NSE:TATAPOWER&i=NSE:EICHERMOT&i=NSE:TATAMTRDVR&i=NSE:ADANIPORTS&i=NSE:CUMMINSIND&i=NSE:CADILAHC&i=NSE:TATAMOTORS&i=NSE:JUBLFOOD&i=NSE:ONGC&i=NSE:COLPAL&i=NSE:STAR&i=NSE:KOTAKBANK&i=NSE:BRITANNIA&i=NSE:DRREDDY&i=NSE:COALINDIA&i=NSE:LUPIN&i=NSE:MINDTREE&i=NSE:BOSCHLTD&i=NSE:BALKRISIND&i=NSE:OFSS&i=NSE:GODREJCP&i=NSE:NATIONALUM&i=NSE:WIPRO&i=NSE:UJJIVAN&i=NSE:IBULHSGFIN&i=NSE:SUNPHARMA&i=NSE:GLENMARK";
+			//  HttpGet getrequest = new HttpGet("https://api.kite.trade/quote?i=NSE:NIFTY+50&i=NSE:NIFTY+BANK"+url);
+			 // HttpGet getrequest = new HttpGet("https://api.kite.trade/quote?i=NSE:NIFTY+50&i=NSE:NIFTY+BANK");
+			// HttpGet getrequest = new HttpGet("https://api.kite.trade/quote?i=NFO:BANKNIFTY1982228400CE&i=NSE:SBIN&i=NSE:INFY&i=NSE:LT&i=NSE:IDEA");
+			  HttpGet getrequest = new HttpGet("https://api.kite.trade/quote?i=NSE:SBIN&i=NSE:INFY&i=NSE:LT&i=NSE:IDEA");
+		      getrequest.addHeader("X-Kite-Version", "3");
+			  getrequest.addHeader("Authorization", "token "+prop.getProperty("apikey")+":"+"");
+			  System.out.println("Executing request " + getrequest.getRequestLine());
+			  DefaultHttpClient httpClient = new DefaultHttpClient();
+			  // below way can be used to run the remaning program as DefaultHttpClient is depreceated
+			  HttpClient httpClients = HttpClientBuilder.create().build();
+			  Calendar calen= Calendar.getInstance();
+			  calen.get(Calendar.HOUR_OF_DAY);
+			  calen.get(Calendar.MINUTE);
+			  int minute5 = 1;
+			  int minute15 = 1;
+			  int minute30=1;
+			  int minute1hr=1;
+			  int tempminute5 = 1;
+			  int tempminute15 = 1;
+			  int tempminute30=1;
+			  int tempminute1hr=1;
+			  
+	       while (true)
+			  {  // outer while
+				  calen=Calendar.getInstance();
+				  
+			 List<Double> nsesbinlist2=null; 
+			  int i=0;
+			  while(i<5)
+			  { // inner while for 5 min
+			  
+			  for (long stop=System.nanoTime()+TimeUnit.SECONDS.toNanos(60);stop>System.nanoTime();)
+			  {
+			      
+				 ohlcv=new HashMap<String,Double>();
+			//	nsesbinlist2=new ArrayList<Double>();
+			  HttpResponse response = httpClient.execute(getrequest);
+			  BufferedReader buffreader = new BufferedReader(new  InputStreamReader(response.getEntity().getContent()), 2048);
+			 // String getResponseString = "";
+			  if (response != null)
+			  {// for response 
+			      StringBuilder sb = new StringBuilder();
+			      String line;
+			     
+			      while ((line = buffreader.readLine()) != null)
+			      { // response extracts the LTP
+			    	  JSONParser j = new JSONParser();
+		               JSONObject o = (JSONObject)j.parse(line);
+		               Map response1 = (Map)o.get("data");
+		               Gson gson =new Gson();
+		               Quotestocks quotestocks=gson.fromJson(response1.toString(), Quotestocks.class);
+		               nsesbinlist.add(quotestocks.getNSESBIN().getLastPrice());
+		            //   System.out.println(line);
+		           //    nsesbinlist2.add(quotestocks.getNSESBIN().getLastPrice());
+		          
+			      } // end of inner-2 while
+			  
+			      String getResponseString = "";
+			      getResponseString = sb.toString();
+			     // System.out.println(getResponseString);		      
+			      
+			  }	  // end of response gathering
+			
+			  }  // loop to run for one second stops
+			  
+		  //  System.out.println(nsesbinlist);
+	         HashMap<Integer,Double> support=	null; 
+	         HashMap<Integer,Double> resistance=	  null;
+	         
+			 Double[] arr = new Double[nsesbinlist.size()]; 
+		     arr = nsesbinlist.toArray(arr);
+		     double[] unboxed = Stream.of(arr).mapToDouble(Double::doubleValue).toArray();
+		     ohlcv.put("open", nsesbinlist.get(0)) ;
+		     ohlcv.put("close", nsesbinlist.get(nsesbinlist.size()-1)) ;
+		     Arrays.sort(arr);
+		     ohlcv.put("high", arr[arr.length-1]);
+		     ohlcv.put("low",arr[0]);
+		     Calendar c = Calendar.getInstance();
+		     //System.out.println(c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DAY_OF_MONTH)+"T"+c.get(Calendar.HOUR_OF_DAY)+"-"+(c.get(Calendar.MINUTE)-1));
+		     sbihash.put("sbi"+c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DAY_OF_MONTH)+"T"+c.get(Calendar.HOUR_OF_DAY)+":"+(c.get(Calendar.MINUTE)-1),ohlcv);
+			// System.out.println("support"+support);
+			//System.out.println("resistance"+resistance);
+			System.out.println(sbihash);
+			nsesbinlist.clear();
+			//sbihash1min.putAll(sbihash);
+			i++;
+			  }
+			  sbihash1min.putAll(sbihash); 
+			  if(sbihash.size()==5)
+			  {
+				  sbihash5min=new HashMap<String,HashMap<String,Double>>();
+			      sbihash5min=Candledata.getcandledatas(sbihash);
+			  }
+			  listof5min.add(sbihash5min);
+			 
+			  minute5=minute5+5;
+			  System.out.println(listof5min);
+			 
+			  if(isMultiple( minute5,5))
+			  {
+			  sbihash15min=Candledata.getcandledatas(sbihash5min);
+			  tempminute5=minute5;
+			  minute15=minute15+15;
+			  }
+			  if(isMultiple( minute15,15))
+			  {
+			  sbihash30min=Candledata.getcandledatas(sbihash15min);
+			  minute30=minute30+30;
+			  }
+			  if(isMultiple( minute30,30))
+			  {
+			  sbihash1hr=Candledata.getcandledatas(sbihash30min);
+			  minute1hr++;
+			  }
+
+                System.out.println("sbihash1min"+sbihash1min);
+                System.out.println("sbihash5min"+sbihash5min);
+                System.out.println("sbihash15min"+sbihash15min);
+                System.out.println("sbihash1hr"+sbihash1hr);
+                sbihash.clear(); 
+		  }
+			  
+		  }
+		  
+		  catch(Exception e)
+		  {
+			  System.out.println("Exception " +e);
+			  e.printStackTrace();
+		  }
+	}
+	public static boolean isMultiple(int num1, int num2){
+	    return !(num1 % num2 != 0);
+	}
+	
+	
+}
